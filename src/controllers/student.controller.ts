@@ -10,6 +10,8 @@ export class StudentController {
     constructor() {
         this.router.get(this.path, this.getStudents);
         this.router.post(this.path, this.createStudent);
+        this.router.get(`${this.path}/:rollno`, this.getStudent);
+        this.router.delete(`${this.path}/:rollno`, this.deleteStudent);
     }
 
     getStudents = async (req: Request, res: Response) => {
@@ -26,5 +28,15 @@ export class StudentController {
             console.log(e);
             res.json({ ok: false, message: "Error in creating student" });
         }
+    };
+    getStudent = async (req: Request, res: Response) => {
+        let rollno = Number(req.params.rollno);
+        let student = await this.studentRepository.findOne(rollno);
+        return res.send(student);
+    };
+    deleteStudent = async (req: Request, res: Response) => {
+        let rollno = Number(req.params.rollno);
+        let student = await this.studentRepository.delete({ rollno : rollno});
+        return res.send(student);
     };
 }
