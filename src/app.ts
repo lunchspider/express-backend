@@ -1,4 +1,5 @@
 import express from "express";
+import * as bodyParser from 'body-parser';
 
 export class App {
     app: express.Application;
@@ -6,6 +7,10 @@ export class App {
     constructor(controllers: any[], port: number) {
         this.app = express();
         this.port = port;
+        this.app.use(bodyParser.json({ limit : '50mb'}));
+        this.app.use(bodyParser.urlencoded({
+            extended: true
+        }));
         this.intializeController(controllers);
     }
 
